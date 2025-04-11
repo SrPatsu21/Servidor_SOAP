@@ -1,0 +1,17 @@
+{
+  "name": "servidor_soap",
+  "version": "1.0.0",
+  "description": "Crie um Web Service do tipo SOAP para calcular o MDC (Mˊaximo Divisor Comum) de uma imagem digital com largura e altura (x e y). Crie um Web Service do tipo SOAP para calcular o MDC (Mˊaximo Divisor Comum) de uma imagem digital com largura e altura (x e y).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "node ./soap-mdc/server.js",
+    "client": "node ./soap-mdc/client.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "strong-soap": "^3.5.6"
+  }
+}
