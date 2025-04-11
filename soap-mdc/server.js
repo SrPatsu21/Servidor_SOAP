@@ -6,13 +6,15 @@ const http = require('http');
 const app = express();
 const port = 3000;
 
-// Função pra calcular MDC
-function calcularMDC(a, b) {
-    if (!b) return a;
-    return calcularMDC(b, a % b);
+//* Calcular MDC
+function calcularMDC(x, y) {
+    while (y) {
+        [x, y] = [y, x % y];
+    }
+    return x;
 }
 
-// Define os métodos que o serviço vai expor
+//* servico exposto
 const service = {
     MDCService: {
         MDCPort: {
@@ -26,12 +28,12 @@ const service = {
     }
 };
 
-// Lê o WSDL que você colou
+//* ler o WSDL
 const path = require('path');
 const xml = fs.readFileSync(path.join(__dirname, 'mdc.wsdl'), 'utf8');
 
 
-// Cria o servidor HTTP e sobe o serviço SOAP
+//* HTTP SOAP
 const server = http.createServer(app);
 
 soap.listen(server, '/mdc', service, xml);
