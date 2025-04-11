@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "strong-soap": "^3.5.6"
+    "express": "^5.1.0",
+    "soap": "^1.1.10"
   }
 }

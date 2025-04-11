@@ -1,23 +1,24 @@
-const http = require('http');
-const soap = require('strong-soap').soap;
+const soap = require('soap');
+const express = require('express');
 const fs = require('fs');
-const path = require('path');
+const http = require('http');
 
-//* Função para calcular o MDC
-function calcularMDC(x, y) {
-    while (y) {
-        [x, y] = [y, x % y];
-    }
-    return x;
+const app = express();
+const port = 3000;
+
+// Função pra calcular MDC
+function calcularMDC(a, b) {
+    if (!b) return a;
+    return calcularMDC(b, a % b);
 }
 
-//* Serviço
+// Define os métodos que o serviço vai expor
 const service = {
     MDCService: {
         MDCPort: {
-            CalculateMDC: function(args) {
-                const x = args.x;
-                const y = args.y;
+            CalculateMDC(args) {
+                const x = parseInt(args.x);
+                const y = parseInt(args.y);
                 const mdc = calcularMDC(x, y);
                 return { MDC: mdc };
             }
@@ -25,14 +26,16 @@ const service = {
     }
 };
 
-const wsdlPath = path.join(__dirname, 'wsdl.xml');
-const wsdlXML = fs.readFileSync(wsdlPath, 'utf8');
+// Lê o WSDL que você colou
+const path = require('path');
+const xml = fs.readFileSync(path.join(__dirname, 'mdc.wsdl'), 'utf8');
 
-const server = http.createServer((req, res) => {
-    res.end('404: Not Found');
-});
 
-server.listen(3000, function() {
-    console.log('Servidor SOAP rodando em http://localhost:3000/mdc');
-    soap.listen(server, '/mdc', service, wsdlXML);
+// Cria o servidor HTTP e sobe o serviço SOAP
+const server = http.createServer(app);
+
+soap.listen(server, '/mdc', service, xml);
+
+server.listen(port, () => {
+    console.log(`SOAP server rodando em http://localhost:${port}/mdc?wsdl`);
 });
